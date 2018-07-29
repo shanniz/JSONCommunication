@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_main"
+    tools:context="com.example.shan.jsoncommunication.NewOrder">
+
+
+    <EditText
+        android:id="@+id/editTextProductId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="65dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Product ID" />
+
+    <EditText
+        android:id="@+id/editTextProductName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/editTextProductId"
+        android:layout_below="@+id/editTextProductId"
+        android:layout_marginTop="43dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Product Name" />
+
+    <EditText
+        android:id="@+id/editTextQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editTextProductName"
+        android:layout_below="@+id/editTextProductName"
+        android:layout_marginTop="57dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="Product Quantity" />
+
+    <Button
+        android:id="@+id/buttonOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/editTextQuantity"
+        android:layout_below="@+id/numberPicker"
+        android:layout_marginTop="52dp"
+        android:elevation="0dp"
+        android:onClick="setOrder"
+        android:text="Make Order" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/editTextQuantity"
+        android:layout_alignTop="@+id/buttonOrder"
+        android:text="Cancel" />
+
+    <NumberPicker
+        android:id="@+id/numberPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/buttonOrder"
+        android:layout_below="@+id/editTextQuantity"
+        android:layout_marginEnd="12dp" />
+
+</RelativeLayout>

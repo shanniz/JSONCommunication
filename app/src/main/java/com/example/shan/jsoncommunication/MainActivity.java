@@ -1,10 +1,15 @@
 package com.example.shan.jsoncommunication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -13,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 //import com.google.firebase.database.FirebaseFirestore;
@@ -48,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void orderActivity(View v){
+        Intent intent = new Intent(MainActivity.this, NewOrder.class);
+        startActivity(intent);
+    }
+
     public void setOrder(View v){
         DatabaseReference myRef = fdb.getReference("Orders");
         Product pro = new Product("p20", "yoghurt", 20);
@@ -66,12 +77,8 @@ public class MainActivity extends AppCompatActivity {
     public void readOrders(View v){
         DatabaseReference myRef = fdb.getReference("Orders");
         ////tview.setText("Data = " + myRef.child("pass"));
-
-
-
         //myRef.child("order1").child("productId").setValue("p12");
         //myRef.child("order1").child("productName").setValue("Orange Juice");
-        //myRef.child("order1").child("quantity").setValue(10);
 
         ////myRef.child("order1").setValue(pro);
 
@@ -79,18 +86,59 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //String value = (String) dataSnapshot.getValue();
-                // do your stuff here with value
                 ///Product p = dataSnapshot.getValue(Product.class);
                 ///tview.setText("Data New = " + dataSnapshot.getValue());
                 //tview.append(p.productName);
 
+                ArrayList<String> listItems=new ArrayList<String>();
+                ArrayAdapter<String> adapter;
+
+                OrdersAdapter myAdapter;
+
+                adapter=new ArrayAdapter<String>(MainActivity.this,
+                        android.R.layout.simple_list_item_1,
+                        listItems);
+
+
+
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                // TODO: handle the post
                     Product p2 = postSnapshot.getValue(Product.class);
-                    tview.append(p2.productName + ", ");
+                    listItems.add(p2.productName + ", " + p2.quantity);
+                    ////listItems.add(p2);
+                    ///tview.append(p2.productName + ", ");
+                    //adapter.notifyDataSetChanged();
                 }
 
+                String[] strArray = new String[listItems.size()];
+                strArray = listItems.toArray(strArray);
+                myAdapter = new OrdersAdapter(MainActivity.this, strArray);
+
                 //dataSnapshot.child("productName").getValue();
+                ListView listView = (ListView) findViewById(R.id.list);
+                listView.setAdapter(myAdapter);
+
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+
+
+                        //String selected = ((TextView) view).getText().toString();
+                        String name = (String)parent.getAdapter().getItem(position).toString();
+
+
+                        //View parentView = (View) parent.getParent();
+                        ///String name = ((TextView) parentView.findViewById(R.id.secondLine)).getText() + "";
+                        //String name = ((TextView)parent.getAdapter().getItem(position)).getText().toString();
+                        ////arg0 is your ListView ... use arg1 which is your clicked row ... – Selvin Feb 15 '13 at 9:01
+
+                        Toast.makeText(getApplicationContext(),
+                                "Click " + name, Toast.LENGTH_LONG).show();
+                        tview.setText("Clicked " + name + ". Modify/Delete?");
+                    }
+                });
+
             }
 
             @Override
@@ -99,15 +147,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
+                // This method is called once with the initial value and whenever data at this location is updated.
                 //String value = dataSnapshot.getValue(String.class);
-                //tview.setText("Data Change + " + value);
                 ///Log.d("asd", "Value is: " + value);
             }
 
